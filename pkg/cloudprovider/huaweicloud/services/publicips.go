@@ -88,11 +88,9 @@ func (p PublicIpService) UnbindAndDeleteEip(portId, publicIpId string, deleteEip
 			"Failed to unBind EIP. Error: %s", unBindEipRes.Err)
 	}
 	if deleteEip {
-		delEipRes := eips.Delete(client, publicIpId)
-		if delEipRes.Err != nil {
+		if delEipRes := eips.Delete(client, publicIpId); delEipRes.Err != nil {
 			updateOpts.PortID = portId
-			unBindEipRes = eips.Update(client, publicIpId, updateOpts)
-			if unBindEipRes.Err != nil {
+			if unBindEipRes = eips.Update(client, publicIpId, updateOpts); unBindEipRes.Err != nil {
 				return status.Errorf(codes.Internal, "Failed to delete EIP, and failed reBind EIP"+
 					"to ELB, please reBind it manually. Error: %s", unBindEipRes.Err)
 			}
