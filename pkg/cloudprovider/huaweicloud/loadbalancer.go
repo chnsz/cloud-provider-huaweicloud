@@ -741,16 +741,13 @@ func (l *LB) EnsureLoadBalancerDeleted(ctx context.Context, clusterName string, 
 	if err != nil {
 		return err
 	}
-	err = l.deleteListeners(loadBalancer, listenerArr, &ensureOptions{lbServices: lbService})
-	if err != nil {
+	if err = l.deleteListeners(loadBalancer, listenerArr, &ensureOptions{lbServices: lbService}); err != nil {
 		return err
 	}
-	err = l.publicIpService.UnbindAndDeleteEip(loadBalancer.VipPortID, params.eipID, params.keepEip)
-	if err != nil {
+	if err = l.publicIpService.UnbindAndDeleteEip(loadBalancer.VipPortID, params.eipID, params.keepEip); err != nil {
 		return err
 	}
-	err = lbService.Delete(loadBalancer.ID)
-	if err != nil {
+	if err = lbService.Delete(loadBalancer.ID); err != nil {
 		return err
 	}
 	return nil
